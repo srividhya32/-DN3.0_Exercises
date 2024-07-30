@@ -1,0 +1,22 @@
+Performance and Scalability:
+•	Time Complexity: As the size of the inventory grows, the operations on the data (such as searching, updating, and deleting) must remain efficient. Efficient algorithms ensure that these operations complete in a reasonable time frame, even with large datasets.
+•	Space Complexity: Efficient data structures also manage memory usage effectively. This is crucial for large inventories to avoid excessive memory consumption and ensure that the system can handle large volumes of data.
+
+Data Access and Manipulation:
+•	Speed of Access: Quick access to inventory items based on attributes (like product ID) is essential for fast operations. Data structures that support efficient lookups and updates are vital for maintaining operational efficiency.
+•	Concurrency and Synchronization: In real-world applications, multiple users may interact with the inventory simultaneously. Data structures and algorithms must be designed to handle concurrent access and ensure data consistency.
+
+Optimization:
+•	Search Efficiency: Efficient algorithms and data structures optimize search operations, reducing the time required to locate specific inventory items.
+•	Update and Deletion Efficiency: As inventory data changes frequently, efficient algorithms help manage updates and deletions without performance degradation.
+Scalability: Properly chosen data structures ensure that the system can handle increasing amounts of data gracefully, allowing for scaling both vertically (more powerful hardware) and horizontally (more distributed systems).
+SUITABLE DSA FOR THIS PROBLEM
+
+HashMap (or HashTable):
+•	Description: A HashMap stores key-value pairs and provides average O(1)O(1)O(1) time complexity  get, put, and remove operations.
+•	Advantages:
+o	Fast access, insertion, and deletion.
+o	Ideal for scenarios where quick lookups by key (e.g., product ID) are necessary.
+•	Disadvantages:
+o	Memory overhead due to hash table implementation.
+o	Performance can degrade if there are many hash collisions.
