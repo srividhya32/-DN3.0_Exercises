@@ -1,0 +1,31 @@
+o	Explain how arrays are represented in memory and their advantages
+##Arrays in Memory##
+**Contiguous Allocation**: Elements stored sequentially in memory.
+**Indexing**: Access elements using indices (0-based).
+**Fixed Size**: Size determined at declaration.
+**Address Calculation**: Address = Base_address + (index * element_size).
+
+##Advantages of Arrays##
+**Fast Access: O(1) time complexity for accessing elements by index.
+**Predictable Memory Usage: Fixed size ensures consistent memory allocation.
+**Cache Friendly: Contiguous storage improves cache performance.
+**Simple to Use: Easy to declare, initialize, and access.
+**No Overhead: Memory-efficient, no additional metadata.
+
+
+##Time Complexity of Array Operations
+Add: O(n) if adding in the middle (requires shifting); O(1) if adding at the end (only if there's space).
+Search: O(n) for linear search; O(log n) if the array is sorted and using binary search.
+Traverse: O(n) to visit each element.
+Delete: O(n) if deleting from the middle (requires shifting); O(1) if deleting the last element.
+
+
+##Limitations of Arrays
+Fixed Size: Cannot resize after declaration.
+Inefficient Insertions/Deletions: Requires shifting elements, leading to O(n) time complexity.
+Homogeneous Data: Can only store elements of the same data type.
+
+##When to Use Arrays
+When fast access by index is needed: O(1) time complexity.
+When memory usage is predictable: Fixed size ensures consistent allocation.
+When working with contiguous data: Better cache performance.
