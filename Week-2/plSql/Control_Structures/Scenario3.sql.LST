@@ -1,0 +1,16 @@
+SQL> DECLARE
+  2      CURSOR loan_cur IS
+  3          SELECT l.CustomerID, c.Name, l.DueDate
+  4          FROM Loans l
+  5          JOIN Customers c ON l.CustomerID = c.CustomerID
+  6          WHERE l.DueDate BETWEEN SYSDATE AND SYSDATE + 30;
+  7  BEGIN
+  8      FOR loan_rec IN loan_cur LOOP
+  9          DBMS_OUTPUT.PUT_LINE('Reminder: Dear ' || loan_rec.Name || ', your loan is due on ' || TO_CHAR(loan_rec.DueDate, 'DD-MON-YYYY') || '. Please ensure timely payment.');
+ 10      END LOOP;
+ 11  END;
+ 12  /
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off

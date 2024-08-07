@@ -1,0 +1,77 @@
+SQL> CREATE OR REPLACE PACKAGE AccountOperations AS
+  2      PROCEDURE OpenNewAccount(
+  3          p_accountID IN NUMBER,
+  4          p_customerID IN NUMBER,
+  5          p_accountType IN VARCHAR2,
+  6          p_balance IN NUMBER
+  7      );
+  8  
+  9      PROCEDURE CloseAccount(
+ 10          p_accountID IN NUMBER
+ 11      );
+ 12  
+ 13      FUNCTION GetTotalBalance(
+ 14          p_customerID IN NUMBER
+ 15      ) RETURN NUMBER;
+ 16  END AccountOperations;
+ 17  /
+
+Package created.
+
+SQL> CREATE OR REPLACE PACKAGE BODY AccountOperations AS
+  2  
+  3      PROCEDURE OpenNewAccount(
+  4          p_accountID IN NUMBER,
+  5          p_customerID IN NUMBER,
+  6          p_accountType IN VARCHAR2,
+  7          p_balance IN NUMBER
+  8      ) IS
+  9      BEGIN
+ 10          INSERT INTO Accounts (AccountID, CustomerID, AccountType, Balance, LastModified)
+ 11          VALUES (p_accountID, p_customerID, p_accountType, p_balance, SYSDATE);
+ 12          COMMIT;
+ 13      EXCEPTION
+ 14          WHEN DUP_VAL_ON_INDEX THEN
+ 15              DBMS_OUTPUT.PUT_LINE('Account ID already exists.');
+ 16              ROLLBACK;
+ 17          WHEN OTHERS THEN
+ 18              DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 19              ROLLBACK;
+ 20      END;
+ 21  
+ 22      PROCEDURE CloseAccount(
+ 23          p_accountID IN NUMBER
+ 24      ) IS
+ 25      BEGIN
+ 26          DELETE FROM Accounts
+ 27          WHERE AccountID = p_accountID;
+ 28          COMMIT;
+ 29      EXCEPTION
+ 30          WHEN NO_DATA_FOUND THEN
+ 31              DBMS_OUTPUT.PUT_LINE('No account found with the provided ID.');
+ 32          WHEN OTHERS THEN
+ 33              DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 34              ROLLBACK;
+ 35      END;
+ 36  
+ 37      FUNCTION GetTotalBalance(
+ 38          p_customerID IN NUMBER
+ 39      ) RETURN NUMBER IS
+ 40          v_totalBalance NUMBER;
+ 41      BEGIN
+ 42          SELECT SUM(Balance) INTO v_totalBalance
+ 43          FROM Accounts
+ 44          WHERE CustomerID = p_customerID;
+ 45          RETURN NVL(v_totalBalance, 0); -- Return 0 if no accounts found
+ 46      EXCEPTION
+ 47          WHEN OTHERS THEN
+ 48              DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 49              RETURN NULL;
+ 50      END;
+ 51  
+ 52  END AccountOperations;
+ 53  /
+
+Package body created.
+
+SQL> spool off

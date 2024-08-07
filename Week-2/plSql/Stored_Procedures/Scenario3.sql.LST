@@ -1,0 +1,41 @@
+SQL> CREATE OR REPLACE PROCEDURE TransferFunds (
+  2      p_source_account_id IN NUMBER,
+  3      p_target_account_id IN NUMBER,
+  4      p_amount IN NUMBER
+  5  ) AS
+  6      v_source_balance NUMBER;
+  7  BEGIN
+  8      -- Check the balance of the source account
+  9      SELECT Balance INTO v_source_balance
+ 10      FROM Accounts
+ 11      WHERE AccountID = p_source_account_id
+ 12      FOR UPDATE;
+ 13  
+ 14      -- Ensure the source account has sufficient balance
+ 15      IF v_source_balance < p_amount THEN
+ 16          RAISE_APPLICATION_ERROR(-20001, 'Insufficient funds in the source account.');
+ 17      ELSE
+ 18          -- Deduct the amount from the source account
+ 19          UPDATE Accounts
+ 20          SET Balance = Balance - p_amount
+ 21          WHERE AccountID = p_source_account_id;
+ 22  
+ 23          -- Add the amount to the target account
+ 24          UPDATE Accounts
+ 25          SET Balance = Balance + p_amount
+ 26          WHERE AccountID = p_target_account_id;
+ 27  
+ 28          COMMIT; -- Commit the transaction
+ 29      END IF;
+ 30  EXCEPTION
+ 31      WHEN NO_DATA_FOUND THEN
+ 32          RAISE_APPLICATION_ERROR(-20002, 'Account not found.');
+ 33      WHEN OTHERS THEN
+ 34          ROLLBACK; -- Rollback the transaction in case of any error
+ 35          RAISE; -- Reraise the exception
+ 36  END TransferFunds;
+ 37  /
+
+Procedure created.
+
+SQL> spool off
