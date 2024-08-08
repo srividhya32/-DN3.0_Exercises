@@ -1,0 +1,20 @@
+
+
+SQL> DECLARE
+  2      CURSOR c_customers IS
+  3          SELECT CustomerID
+  4          FROM Customers
+  5          WHERE Balance > 10000;
+  6  BEGIN
+  7      FOR rec IN c_customers LOOP
+  8          UPDATE Customers
+  9          SET IsVIP = 'Y'  -- Set IsVIP to 'Y' to mark as VIP
+ 10          WHERE CustomerID = rec.CustomerID;
+ 11      END LOOP;
+ 12      COMMIT;
+ 13  END;
+ 14  /
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off

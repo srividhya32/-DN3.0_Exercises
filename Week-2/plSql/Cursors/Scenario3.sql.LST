@@ -1,0 +1,26 @@
+SQL> DECLARE
+  2      CURSOR c_loans IS
+  3          SELECT LoanID, InterestRate
+  4          FROM Loans;
+  5  
+  6      v_loanID Loans.LoanID%TYPE;
+  7      v_currentRate Loans.InterestRate%TYPE;
+  8      new_rate CONSTANT NUMBER := 0.03; -- Example 3% increase in interest rate
+  9  BEGIN
+ 10      FOR rec IN c_loans LOOP
+ 11          v_loanID := rec.LoanID;
+ 12          v_currentRate := rec.InterestRate;
+ 13  
+ 14          -- Update the interest rate
+ 15          UPDATE Loans
+ 16          SET InterestRate = v_currentRate + new_rate
+ 17          WHERE LoanID = v_loanID;
+ 18      END LOOP;
+ 19  
+ 20      COMMIT; -- Commit changes
+ 21  END;
+ 22  /
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off

@@ -1,0 +1,36 @@
+SQL> DECLARE
+  2      CURSOR c_transactions IS
+  3          SELECT c.CustomerID, c.Name, t.TransactionDate, t.Amount, t.TransactionType
+  4          FROM Customers c
+  5          JOIN Accounts a ON c.CustomerID = a.CustomerID
+  6          JOIN Transactions t ON a.AccountID = t.AccountID
+  7          WHERE EXTRACT(MONTH FROM t.TransactionDate) = EXTRACT(MONTH FROM SYSDATE)
+  8            AND EXTRACT(YEAR FROM t.TransactionDate) = EXTRACT(YEAR FROM SYSDATE);
+  9  
+ 10      v_customerID Customers.CustomerID%TYPE;
+ 11      v_name Customers.Name%TYPE;
+ 12      v_transactionDate Transactions.TransactionDate%TYPE;
+ 13      v_amount Transactions.Amount%TYPE;
+ 14      v_transactionType Transactions.TransactionType%TYPE;
+ 15  BEGIN
+ 16      FOR rec IN c_transactions LOOP
+ 17          v_customerID := rec.CustomerID;
+ 18          v_name := rec.Name;
+ 19          v_transactionDate := rec.TransactionDate;
+ 20          v_amount := rec.Amount;
+ 21          v_transactionType := rec.TransactionType;
+ 22  
+ 23          -- Print the statement (or use DBMS_OUTPUT in practice)
+ 24          DBMS_OUTPUT.PUT_LINE('Customer ID: ' || v_customerID);
+ 25          DBMS_OUTPUT.PUT_LINE('Name: ' || v_name);
+ 26          DBMS_OUTPUT.PUT_LINE('Transaction Date: ' || v_transactionDate);
+ 27          DBMS_OUTPUT.PUT_LINE('Amount: ' || v_amount);
+ 28          DBMS_OUTPUT.PUT_LINE('Transaction Type: ' || v_transactionType);
+ 29          DBMS_OUTPUT.PUT_LINE('-----------------------------------');
+ 30      END LOOP;
+ 31  END;
+ 32  /
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off

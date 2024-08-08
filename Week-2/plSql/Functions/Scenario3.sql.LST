@@ -1,0 +1,28 @@
+SQL> CREATE OR REPLACE FUNCTION HasSufficientBalance (
+  2      p_account_id NUMBER,
+  3      p_amount NUMBER
+  4  ) RETURN BOOLEAN IS
+  5      v_balance NUMBER;
+  6  BEGIN
+  7      -- Retrieve the balance of the account
+  8      SELECT Balance INTO v_balance
+  9      FROM Accounts
+ 10      WHERE AccountID = p_account_id;
+ 11  
+ 12      -- Check if the balance is sufficient
+ 13      IF v_balance >= p_amount THEN
+ 14          RETURN TRUE;
+ 15      ELSE
+ 16          RETURN FALSE;
+ 17      END IF;
+ 18  EXCEPTION
+ 19      WHEN NO_DATA_FOUND THEN
+ 20          RETURN FALSE; -- Account not found or insufficient balance
+ 21      WHEN OTHERS THEN
+ 22          RETURN FALSE; -- Handle any other errors gracefully
+ 23  END HasSufficientBalance;
+ 24  /
+
+Function created.
+
+SQL> spool off

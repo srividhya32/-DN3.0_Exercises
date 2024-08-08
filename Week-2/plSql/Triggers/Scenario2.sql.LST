@@ -1,0 +1,44 @@
+SQL> -- Create the table
+SQL> CREATE TABLE AuditLog (
+  2      AuditID NUMBER PRIMARY KEY,
+  3      TransactionID NUMBER,
+  4      AccountID NUMBER,
+  5      TransactionDate DATE,
+  6      Amount NUMBER,
+  7      TransactionType VARCHAR2(10),
+  8      LogDate DATE
+  9  );
+CREATE TABLE AuditLog (
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> -- Create the sequence
+SQL> CREATE SEQUENCE AuditLogSeq
+  2  START WITH 1
+  3  INCREMENT BY 1
+  4  NOCACHE
+  5  NOCYCLE;
+CREATE SEQUENCE AuditLogSeq
+                *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> -- Create the trigger
+SQL> CREATE OR REPLACE TRIGGER AuditLogBeforeInsert
+  2  BEFORE INSERT ON AuditLog
+  3  FOR EACH ROW
+  4  BEGIN
+  5      IF :NEW.AuditID IS NULL THEN
+  6          SELECT AuditLogSeq.NEXTVAL INTO :NEW.AuditID FROM dual;
+  7      END IF;
+  8  END;
+  9  /
+
+Trigger created.
+
+SQL> spool off
