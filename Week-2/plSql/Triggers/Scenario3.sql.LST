@@ -1,0 +1,28 @@
+SQL> CREATE OR REPLACE TRIGGER CheckTransactionRules
+  2  BEFORE INSERT ON Transactions
+  3  FOR EACH ROW
+  4  DECLARE
+  5      v_balance NUMBER;
+  6  BEGIN
+  7      -- Check if the transaction is a withdrawal and ensure it does not exceed the balance
+  8      IF :NEW.TransactionType = 'Withdrawal' THEN
+  9          SELECT Balance INTO v_balance
+ 10          FROM Accounts
+ 11          WHERE AccountID = :NEW.AccountID;
+ 12  
+ 13          IF :NEW.Amount > v_balance THEN
+ 14              RAISE_APPLICATION_ERROR(-20001, 'Insufficient funds for withdrawal.');
+ 15          END IF;
+ 16  
+ 17      -- Check if the transaction is a deposit and ensure it is positive
+ 18      ELSIF :NEW.TransactionType = 'Deposit' THEN
+ 19          IF :NEW.Amount <= 0 THEN
+ 20              RAISE_APPLICATION_ERROR(-20002, 'Deposit amount must be positive.');
+ 21          END IF;
+ 22      END IF;
+ 23  END;
+ 24  /
+
+Trigger created.
+
+SQL> spool off
